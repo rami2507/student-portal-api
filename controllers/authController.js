@@ -5,6 +5,20 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { promisify } = require("util");
 
+exports.resetPassword = asyncHandler(async (req, res, next) => {
+  const { matricule_id, password } = req.body;
+  const user = await User.findOne({ matricule_id });
+  if (!user) {
+    return next(new AppError("User not found", 404));
+  }
+  user.password = await bcrypt.hash(password, 12);
+  await user.save();
+  res.status(200).json({
+    status: "success",
+    message: "Password reset successfully",
+  });
+});
+
 exports.signup = asyncHandler(async (req, res, next) => {
   let user = req.body;
   user.password = await bcrypt.hash(user.password, 12);

@@ -14,6 +14,10 @@ const userSchema = new mongoose.Schema({
   },
   role: { type: String, enum: ["student", "professor", "agent"] },
   password: { type: String, required: [true, "A user must have a password"] },
+  section: String,
+  group: String,
+  teachingModules: [{ type: mongoose.Schema.Types.ObjectId, ref: "Module" }],
+  enrolledModules: [{ type: mongoose.Schema.Types.ObjectId, ref: "Module" }],
 });
 
 const User = mongoose.model("User", userSchema);
